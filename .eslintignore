@@ -1,0 +1,7 @@
+node_modules
+template
+packages/**/**/bin
+packages/test
+temp
+entry-wc.js
+dist
