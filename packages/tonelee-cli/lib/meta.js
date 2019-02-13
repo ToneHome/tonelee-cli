@@ -1,17 +1,17 @@
 /** @format */
 
-const path = require('path');
-const fs = require('fs');
-const { proPrompt, compPrompt } = require('./prompts');
+const path = require("path");
+const fs = require("fs");
+const { proPrompt, compPrompt } = require("./prompts");
 
 const {
   sortDependencies,
   installDependencies,
   runLintFix,
   printMessage
-} = require('./utils');
+} = require("./utils");
 
-const templateVersion = '1.0.1';
+const templateVersion = "1.0.1";
 
 module.exports = {
   helpers: {
@@ -29,11 +29,11 @@ module.exports = {
   prompts: proPrompt,
   compPrompt: compPrompt,
   filters: {
-    'spa/**/**/*': 'spa',
-    'mpa/**/**/*': '!spa',
-    '{spa,mpa}/build/*': 'build',
-    '{spa,mpa}/config/*': 'build',
-    '**/src/store/**/*': 'vuex'
+    "spa/**/**/*": "spa",
+    "mpa/**/**/*": "!spa",
+    "{spa,mpa}/build/*": "build",
+    "{spa,mpa}/config/*": "build",
+    "**/src/store/**/*": "vuex"
     // 'package.bak.json': 'false',
     // '.eslintrc': 'lint',
     // '.eslintignore': 'false'
@@ -49,13 +49,13 @@ module.exports = {
     // 'test/e2e/**/*': 'e2e',
     // 'src/router/**/*': 'router',
   },
-  skipInterpolation: ['spa/**/**/*', 'mpa/**/**/*'],
+  skipInterpolation: ["spa/**/**/*", "mpa/**/**/*"],
   complete: function(data, { chalk }) {
     const green = chalk.green;
-
+    console.log("complete--", data);
     sortDependencies(data, green);
 
-    const cwd = path.join(process.cwd(), data.inPlace ? '' : data.destDirName);
+    const cwd = path.join(process.cwd(), data.inPlace ? "" : data.destDirName);
 
     if (data.autoInstall) {
       installDependencies(cwd, data.autoInstall, green)
@@ -66,7 +66,7 @@ module.exports = {
           printMessage(data, green);
         })
         .catch(e => {
-          console.log(chalk.red('Error:'), e);
+          console.log(chalk.red("Error:"), e);
         });
     } else {
       printMessage(data, chalk);

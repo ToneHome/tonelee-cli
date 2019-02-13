@@ -1,14 +1,14 @@
 /** @format */
 
-const chalk = require('chalk');
-const format = require('util').format;
+const chalk = require("chalk");
+const format = require("util").format;
 
 /**
  * Prefix.
  */
 
-const prefix = '   tonelee-cli';
-const sep = chalk.gray('·');
+const prefix = "   tonelee-cli";
+const sep = chalk.gray("·");
 
 /**
  * Log a `message` to the console.

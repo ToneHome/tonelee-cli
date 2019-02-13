@@ -1,9 +1,9 @@
 /** @format */
 
-const path = require('path');
-const metadata = require('read-metadata');
-const exists = require('fs').existsSync;
-const COMP_TYPE = 'comp';
+const path = require("path");
+const metadata = require("read-metadata");
+const exists = require("fs").existsSync;
+const COMP_TYPE = "comp";
 
 /**
  * Read prompts metadata.
@@ -13,10 +13,10 @@ const COMP_TYPE = 'comp';
  */
 
 module.exports = function options(name, dir, type) {
-  const opts = require('./meta');
+  const opts = require("./meta");
   opts.prompts = type === COMP_TYPE ? opts.compPrompt : opts.prompts;
   opts.prompts.framework && (opts.prompts.framework.default = type);
-  setDefault(opts, 'name', name);
+  setDefault(opts, "name", name);
   return opts;
 };
 
@@ -34,12 +34,12 @@ function setDefault(opts, key, val) {
     delete opts.schema;
   }
   const prompts = opts.prompts || (opts.prompts = {});
-  if (!prompts[key] || typeof prompts[key] !== 'object') {
+  if (!prompts[key] || typeof prompts[key] !== "object") {
     prompts[key] = {
-      type: 'string',
+      type: "string",
       default: val
     };
   } else {
-    prompts[key]['default'] = val;
+    prompts[key]["default"] = val;
   }
 }

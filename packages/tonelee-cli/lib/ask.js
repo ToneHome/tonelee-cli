@@ -1,13 +1,13 @@
 /** @format */
 
-const async = require('async');
-const inquirer = require('inquirer');
-const evaluate = require('./eval');
+const async = require("async");
+const inquirer = require("inquirer");
+const evaluate = require("./eval");
 
 // Support types from prompt-for which was used before
 const promptMapping = {
-  string: 'input',
-  boolean: 'confirm'
+  string: "input",
+  boolean: "confirm"
 };
 
 /**
@@ -40,12 +40,12 @@ module.exports = function ask(prompts, data, done) {
 function prompt(data, key, prompt, done) {
   // skip prompts whose when condition is not met
   if (prompt.when && !evaluate(prompt.when, data)) {
-    if (key === 'framework') data[key] = prompt.default;
+    if (key === "framework") data[key] = prompt.default;
     return done();
   }
 
   let promptDefault = prompt.default;
-  if (typeof prompt.default === 'function') {
+  if (typeof prompt.default === "function") {
     promptDefault = function() {
       return prompt.default.bind(this)(data);
     };
@@ -68,7 +68,7 @@ function prompt(data, key, prompt, done) {
         answers[key].forEach(multiChoiceAnswer => {
           data[key][multiChoiceAnswer] = true;
         });
-      } else if (typeof answers[key] === 'string') {
+      } else if (typeof answers[key] === "string") {
         data[key] = answers[key].replace(/"/g, '\\"');
       } else {
         data[key] = answers[key];

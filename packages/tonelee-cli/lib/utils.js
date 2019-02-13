@@ -1,10 +1,10 @@
 /** @format */
 
-const path = require('path');
-const fs = require('fs');
-const spawn = require('child_process').spawn;
+const path = require("path");
+const fs = require("fs");
+const spawn = require("child_process").spawn;
 
-const lintStyles = ['standard', 'airbnb'];
+const lintStyles = ["standard", "airbnb"];
 
 /**
  * Sorts dependencies in package.json alphabetically.
@@ -13,8 +13,8 @@ const lintStyles = ['standard', 'airbnb'];
  */
 exports.sortDependencies = function sortDependencies(data) {
   const packageJsonFile = path.join(
-    data.inPlace ? '' : data.destDirName,
-    'package.json'
+    data.inPlace ? "" : data.destDirName,
+    "package.json"
   );
   try {
     const packageJson = JSON.parse(fs.readFileSync(packageJsonFile));
@@ -22,9 +22,11 @@ exports.sortDependencies = function sortDependencies(data) {
     packageJson.dependencies = sortObject(packageJson.dependencies);
     fs.writeFileSync(
       packageJsonFile,
-      JSON.stringify(packageJson, null, 2) + '\n'
+      JSON.stringify(packageJson, null, 2) + "\n"
     );
-  } catch (error) {}
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 /**
@@ -34,12 +36,12 @@ exports.sortDependencies = function sortDependencies(data) {
  */
 exports.installDependencies = function installDependencies(
   cwd,
-  executable = 'npm',
+  executable = "npm",
   color
 ) {
-  console.log(`\n\n# ${color('Installing project dependencies ...')}`);
-  console.log('# ========================\n');
-  return runCommand(executable, ['install'], {
+  console.log(`\n\n# ${color("Installing project dependencies ...")}`);
+  console.log("# ========================\n");
+  return runCommand(executable, ["install"], {
     cwd
   });
 };
@@ -53,14 +55,14 @@ exports.runLintFix = function runLintFix(cwd, data, color) {
   if (data.lint && lintStyles.indexOf(data.lintConfig) !== -1) {
     console.log(
       `\n\n${color(
-        'Running eslint --fix to comply with chosen preset rules...'
+        "Running eslint --fix to comply with chosen preset rules..."
       )}`
     );
-    console.log('# ========================\n');
+    console.log("# ========================\n");
     const args =
-      data.autoInstall === 'npm'
-        ? ['run', 'lint', '--', '--fix']
-        : ['run', 'lint', '--fix'];
+      data.autoInstall === "npm"
+        ? ["run", "lint", "--", "--fix"]
+        : ["run", "lint", "--fix"];
     return runCommand(data.autoInstall, args, {
       cwd
     });
@@ -74,13 +76,13 @@ exports.runLintFix = function runLintFix(cwd, data, color) {
  */
 exports.printMessage = function printMessage(data, { green, yellow }) {
   const message = `
-# ${green('Project initialization finished!')}
+# ${green("Project initialization finished!")}
 # ========================
 
 If your project has "package.json", To get started：
 
   ${yellow(
-    `${data.inPlace ? '' : `cd ${data.destDirName}\n  `}${installMsg(
+    `${data.inPlace ? "" : `cd ${data.destDirName}\n  `}${installMsg(
       data
     )}${lintMsg(data)}tonelee dev (or npm run dev )`
   )}
@@ -99,8 +101,8 @@ function lintMsg(data) {
   return !data.autoInstall &&
     data.lint &&
     lintStyles.indexOf(data.lintConfig) !== -1
-    ? 'tonelee lint -- --fix (or for yarn: yarn run lint --fix)\n  '
-    : '';
+    ? "tonelee lint -- --fix (or for yarn: yarn run lint --fix)\n  "
+    : "";
 }
 
 /**
@@ -109,7 +111,7 @@ function lintMsg(data) {
  * @param {Object} data Data from the questionnaire
  */
 function installMsg(data) {
-  return !data.autoInstall ? 'npm install (or if using yarn: yarn)\n  ' : '';
+  return !data.autoInstall ? "npm install (or if using yarn: yarn)\n  " : "";
 }
 
 /**
@@ -128,14 +130,14 @@ function runCommand(cmd, args, options) {
       Object.assign(
         {
           cwd: process.cwd(),
-          stdio: 'inherit',
+          stdio: "inherit",
           shell: true
         },
         options
       )
     );
 
-    spwan.on('exit', () => {
+    spwan.on("exit", () => {
       resolve();
     });
   });

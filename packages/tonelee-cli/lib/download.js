@@ -1,6 +1,6 @@
 /** @format */
 
-var downloadUrl = require('download');
+var downloadUrl = require("download");
 
 /**
  * Expose `download`.
@@ -21,8 +21,8 @@ function download(name, dest, fn) {
   downloadUrl(url, dest, {
     extract: true,
     strip: 1,
-    mode: '666',
-    headers: { accept: 'application/zip' }
+    mode: "666",
+    headers: { accept: "application/zip" }
   })
     .then(data => {
       fn();

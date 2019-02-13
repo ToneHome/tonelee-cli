@@ -1,25 +1,25 @@
 /** @format */
 
-const chalk = require('chalk');
-const Metalsmith = require('metalsmith');
-const Handlebars = require('handlebars');
-const async = require('async');
-const render = require('consolidate').handlebars.render;
-const path = require('path');
-const multimatch = require('multimatch');
-const renamer = require('./metalsmith-rename');
-const getOptions = require('./options');
-const ask = require('./ask');
-const filter = require('./filter');
-const logger = require('./logger');
-const { printMessage } = require('./utils');
+const chalk = require("chalk");
+const Metalsmith = require("metalsmith");
+const Handlebars = require("handlebars");
+const async = require("async");
+const render = require("consolidate").handlebars.render;
+const path = require("path");
+const multimatch = require("multimatch");
+const renamer = require("./metalsmith-rename");
+const getOptions = require("./options");
+const ask = require("./ask");
+const filter = require("./filter");
+const logger = require("./logger");
+const { printMessage } = require("./utils");
 
 // register handlebars helper
-Handlebars.registerHelper('if_eq', function(a, b, opts) {
+Handlebars.registerHelper("if_eq", function(a, b, opts) {
   return a === b ? opts.fn(this) : opts.inverse(this);
 });
 
-Handlebars.registerHelper('unless_eq', function(a, b, opts) {
+Handlebars.registerHelper("unless_eq", function(a, b, opts) {
   return a === b ? opts.inverse(this) : opts.fn(this);
 });
 
@@ -56,7 +56,7 @@ module.exports = function generate(info, done) {
 
     const helpers = { chalk, logger };
 
-    if (opts.metalsmith && typeof opts.metalsmith.before === 'function') {
+    if (opts.metalsmith && typeof opts.metalsmith.before === "function") {
       opts.metalsmith.before(metalsmith, opts, helpers);
     }
 
@@ -67,29 +67,29 @@ module.exports = function generate(info, done) {
       .use(
         renamer({
           file: {
-            pattern: '+(mpa|spa)/**/*',
+            pattern: "+(mpa|spa)/**/*",
             rename: function(name) {
-              return name.replace(/spa|mpa/g, './');
+              return name.replace(/spa|mpa/g, "./");
             }
           }
         })
       )
       .use(renderTemplateFiles(opts.skipInterpolation));
 
-    if (typeof opts.metalsmith === 'function') {
+    if (typeof opts.metalsmith === "function") {
       opts.metalsmith(metalsmith, opts, helpers);
-    } else if (opts.metalsmith && typeof opts.metalsmith.after === 'function') {
+    } else if (opts.metalsmith && typeof opts.metalsmith.after === "function") {
       opts.metalsmith.after(metalsmith, opts, helpers);
     }
   }
 
   metalsmith
     .clean(false)
-    .source('.') // start from template root instead of `./src` which is Metalsmith's default for `source`
+    .source(".") // start from template root instead of `./src` which is Metalsmith's default for `source`
     .destination(info.dest)
     .build((err, files) => {
       done(err);
-      if (typeof opts.complete === 'function') {
+      if (typeof opts.complete === "function") {
         const helpers = { chalk, logger, files };
         opts.complete(data, helpers);
       } else {
@@ -139,7 +139,7 @@ function filterFiles(filters) {
 
 function renderTemplateFiles(skipInterpolation) {
   skipInterpolation =
-    typeof skipInterpolation === 'string'
+    typeof skipInterpolation === "string"
       ? [skipInterpolation]
       : skipInterpolation;
   return (files, metalsmith, done) => {
@@ -187,16 +187,16 @@ function logMessage(message, data) {
   render(message, data, (err, res) => {
     if (err) {
       console.error(
-        '\n   Error when rendering template complete message: ' +
+        "\n   Error when rendering template complete message: " +
           err.message.trim()
       );
     } else {
       console.log(
-        '\n' +
+        "\n" +
           res
             .split(/\r?\n/g)
-            .map(line => '   ' + line)
-            .join('\n')
+            .map(line => "   " + line)
+            .join("\n")
       );
     }
   });

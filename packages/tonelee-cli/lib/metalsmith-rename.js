@@ -1,8 +1,8 @@
 /** @format */
 
-'use strict';
-var minimatch = require('minimatch'),
-  path = require('path');
+"use strict";
+var minimatch = require("minimatch"),
+  path = require("path");
 
 module.exports = plugin;
 
@@ -16,12 +16,12 @@ function plugin(options) {
         }
 
         var rename = options[opt].rename;
-        var renamedEntry = path.dirname(file) + '/';
+        var renamedEntry = path.dirname(file) + "/";
 
-        if (renamedEntry === './') {
-          renamedEntry = '';
+        if (renamedEntry === "./") {
+          renamedEntry = "";
         }
-        if (typeof rename === 'function') {
+        if (typeof rename === "function") {
           renamedEntry = rename(file);
         } else {
           renamedEntry += rename;

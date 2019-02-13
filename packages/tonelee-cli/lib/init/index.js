@@ -4,16 +4,16 @@
  * @format
  */
 
-const inquirer = require('inquirer');
-const path = require('path');
-const ora = require('ora');
-const home = require('user-home');
-const rm = require('rimraf').sync;
-const download = require('../download');
-const logger = require('../logger');
-const exists = require('fs').existsSync;
-const generate = require('../generate');
-const chalk = require('chalk');
+const inquirer = require("inquirer");
+const path = require("path");
+const ora = require("ora");
+const home = require("user-home");
+const rm = require("rimraf").sync;
+const download = require("../download");
+const logger = require("../logger");
+const exists = require("fs").existsSync;
+const generate = require("../generate");
+const chalk = require("chalk");
 
 async function run(info) {
   let templateName = info.template;
@@ -21,37 +21,48 @@ async function run(info) {
     //如果没有输入自定义模板名称，则选择
     const answers = await inquirer.prompt([
       {
-        type: 'list',
-        message: 'Which Project Type Do You Need:',
-        name: 'type',
+        type: "list",
+        message: "Which Project Type Do You Need:",
+        name: "type",
         choices: [
           {
-            name: 'Web',
-            value: 'web'
+            name: "Web",
+            value: "web"
+          },
+          {
+            name: "weapp",
+            value: "weapp"
           }
         ]
       },
       {
-        type: 'list',
-        when: function (answer) {
-          return answer.type !== 'comp';
+        type: "list",
+        when: function(answer) {
+          return answer.type !== "comp";
         },
-        message: 'Pick A JS Framework For Your Project',
-        name: 'framework',
+        message: "Pick A JS Framework For Your Project",
+        name: "framework",
         choices: [
           {
-            name: 'Vue.js',
-            value: 'vue'
+            name: "Vue.js",
+            value: "vue"
+          },
+          {
+            name: "react.js",
+            value: "react"
           }
         ]
       }
     ]);
-
-    templateName = answers.framework ? answers.framework : answers.type;
+    if (answers.type === "web") {
+      templateName = answers.framework;
+    } else {
+      templateName = answers.framework === "vue" ? "mpvue" : "taro";
+    }
   }
 
   await downloadAndGenerate(templateName, {
-    tmp: path.join(home, '.tonelee-templates-', templateName),
+    tmp: path.join(home, ".tonelee-templates-", templateName),
     ...info
   });
 }
@@ -61,7 +72,7 @@ async function run(info) {
  * @param {String} template
  */
 async function downloadAndGenerate(tmpName, info) {
-  const spinner = ora('Downloading template ...');
+  const spinner = ora("Downloading template ...");
   spinner.start();
 
   // 如果本地存在模板则先删除
@@ -71,22 +82,26 @@ async function downloadAndGenerate(tmpName, info) {
     spinner.stop();
     if (err)
       logger.fatal(
-        'Failed to download template repo ' +
-        chalk.red('tonelee-template-' + tmpName) +
-        ': ' +
-        err.message.trim()
+        "Failed to download template repo " +
+          chalk.red("tonelee-template-" + tmpName) +
+          ": " +
+          err.message.trim()
       );
-    generate({
-      name: info.name,
-      src: info.tmp,
-      dest: info.to,
-      isCustom: info.isCustom,
-      tmpName: tmpName
-    }, err => {
-      if (err) logger.fatal(err);
-      console.log();
-      logger.success('Generated "%s".', info.name);
-    });
+    console.log(info);
+    generate(
+      {
+        name: info.name,
+        src: info.tmp,
+        dest: info.to,
+        isCustom: info.isCustom,
+        tmpName: tmpName
+      },
+      err => {
+        if (err) logger.fatal(err);
+        console.log();
+        logger.success('Generated "%s".', info.name);
+      }
+    );
   });
 }
 
@@ -96,21 +111,21 @@ async function downloadAndGenerate(tmpName, info) {
  * @param {*} options
  */
 async function init(rawName, options = {}) {
-  const inPlace = !rawName || rawName === '.';
+  const inPlace = !rawName || rawName === ".";
   const info = {
-    to: path.resolve(rawName || '.'),
-    name: inPlace ? path.relative('../', process.cwd()) : rawName,
+    to: path.resolve(rawName || "."),
+    name: inPlace ? path.relative("../", process.cwd()) : rawName,
     template: options.template, //自定义模版名称
     isCustom: options.template ? true : false //是否自定义模版
   };
   if (inPlace || exists(info.to)) {
     const isMakeDir = await inquirer.prompt([
       {
-        type: 'confirm',
+        type: "confirm",
         message: inPlace
-          ? 'Generate project in current directory?'
-          : 'Target directory exists. Continue?',
-        name: 'ok'
+          ? "Generate project in current directory?"
+          : "Target directory exists. Continue?",
+        name: "ok"
       }
     ]);
     if (isMakeDir.ok) await run(info);

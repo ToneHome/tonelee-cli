@@ -1,6 +1,6 @@
 {
-  "name": "@tonelee/cli",
-  "version": "1.0.1",
+  "name": "tonelee-cli",
+  "version": "1.0.2",
   "description": "Command line interface for FE development",
   "bin": {
     "tonelee": "bin/tonelee"
@@ -13,8 +13,7 @@
     "url": "https://github.com/ToneHome/tonelee-cli"
   },
   "keywords": [
-    "vue",
-    "weapp"
+    "vue"
   ],
   "author": "Tone Lee",
   "license": "ISC",
