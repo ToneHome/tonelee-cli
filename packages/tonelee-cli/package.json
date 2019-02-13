@@ -1,6 +1,6 @@
 {
   "name": "tonelee-cli",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "Command line interface for FE development",
   "bin": {
     "tonelee": "bin/tonelee"
